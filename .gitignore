@@ -2,13 +2,14 @@ Binaries
 DerivedDataCache
 Intermediate
 Saved
+Script
 .vscode
 .vs
+*.sln
 *.VC.db
 *.opensdf
 *.opendb
 *.sdf
-*.sln
 *.suo
 *.xcodeproj
 *.xcworkspace
