@@ -319,6 +319,34 @@ void AShutarCharacter::CalculateCrosshairSpreadRate(float DeltaTime) {
 	CrosshairSpreadRate = CrosshairHipSpreadRate - CrosshairAimSpreadRate + CrosshairVelocitySpreadRate + CrosshairAirSpreadRate + CrosshairFireSpreadRate;
 }
 
+void AShutarCharacter::ItemWidgetTrace() {
+	AItem* CurrentTracedItem = nullptr;
+	if (ItemOverlappingCount) {
+		FHitResult HitItem;
+		FVector HitEnd;
+		GetCrosshairTraceHit(500.f, HitItem, HitEnd);
+		if (HitItem.bBlockingHit) {
+			CurrentTracedItem = Cast<AItem>(HitItem.GetActor());
+			if (CurrentTracedItem) {
+				CurrentTracedItem->GetPickUpWidgetComponent()->SetVisibility(true);
+			}
+		}
+	}
+	if (TracedItem && TracedItem != CurrentTracedItem) {
+		TracedItem->GetPickUpWidgetComponent()->SetVisibility(false);
+		TracedItem = nullptr;
+	}
+	else {
+		TracedItem = CurrentTracedItem;
+	}
+}
+
+void AShutarCharacter::IncrementItemOverlappingCount(int8 Amount) {
+	if (ItemOverlappingCount + Amount >= 0) {
+		ItemOverlappingCount += Amount;
+	}
+}
+
 void AShutarCharacter::SelectPressed() {
 	//AWeapon* TracedWeapon = Cast<AWeapon>(TracedItem);
 	//SwapWeapon(TracedWeapon);
@@ -358,35 +386,8 @@ void AShutarCharacter::UnEquipWeapon() {
 
 void AShutarCharacter::SwapWeapon(AWeapon* WeaponToSwap) {
 	UnEquipWeapon();
+	InterpWeapon(WeaponToSwap);
 	EquipWeapon(WeaponToSwap);
-}
-
-void AShutarCharacter::ItemWidgetTrace() {
-	AItem* CurrentTracedItem = nullptr;
-	if (ItemOverlappingCount) {
-		FHitResult HitItem;
-		FVector HitEnd;
-		GetCrosshairTraceHit(500.f, HitItem, HitEnd);
-		if (HitItem.bBlockingHit) {
-			CurrentTracedItem = Cast<AItem>(HitItem.GetActor());
-			if (CurrentTracedItem) {
-				CurrentTracedItem->GetPickUpWidgetComponent()->SetVisibility(true);
-			}
-		}
-	}
-	if (TracedItem && TracedItem != CurrentTracedItem) {
-		TracedItem->GetPickUpWidgetComponent()->SetVisibility(false);
-		TracedItem = nullptr;
-	}
-	else {
-		TracedItem = CurrentTracedItem;
-	}
-}
-
-void AShutarCharacter::IncrementItemOverlappingCount(int8 Amount) {
-	if (ItemOverlappingCount + Amount >= 0) {
-		ItemOverlappingCount += Amount;
-	}
 }
 
 FVector AShutarCharacter::GetItemInterpTargetLocation() const {
@@ -395,6 +396,8 @@ FVector AShutarCharacter::GetItemInterpTargetLocation() const {
 FRotator AShutarCharacter::GetIteminterpTargeTRotation() const {
 	return FollowCamera->GetForwardVector().Rotation();
 }
+
+
 
 void AShutarCharacter::EquipItem(AItem* ItemToEquip) {
 	auto Weapon = Cast<AWeapon>(ItemToEquip);
