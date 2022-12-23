@@ -351,7 +351,6 @@ void AShutarCharacter::SelectPressed() {
 	//AWeapon* TracedWeapon = Cast<AWeapon>(TracedItem);
 	//SwapWeapon(TracedWeapon);
 
-	UnEquipWeapon();
 	if (TracedItem) TracedItem->ItemInterpStart(this);
 }
 
@@ -401,7 +400,7 @@ FRotator AShutarCharacter::GetIteminterpTargeTRotation() const {
 void AShutarCharacter::EquipItem(AItem* ItemToEquip) {
 	auto Weapon = Cast<AWeapon>(ItemToEquip);
 	if (Weapon) {
-		EquipWeapon(Weapon);
+		SwapWeapon(Weapon);
 	}
 	//else if (Item) //consume;
 }
