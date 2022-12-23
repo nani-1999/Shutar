@@ -350,6 +350,8 @@ void AShutarCharacter::IncrementItemOverlappingCount(int8 Amount) {
 void AShutarCharacter::SelectPressed() {
 	//AWeapon* TracedWeapon = Cast<AWeapon>(TracedItem);
 	//SwapWeapon(TracedWeapon);
+
+	UnEquipWeapon();
 	if (TracedItem) TracedItem->ItemInterpStart(this);
 }
 
@@ -386,7 +388,6 @@ void AShutarCharacter::UnEquipWeapon() {
 
 void AShutarCharacter::SwapWeapon(AWeapon* WeaponToSwap) {
 	UnEquipWeapon();
-	InterpWeapon(WeaponToSwap);
 	EquipWeapon(WeaponToSwap);
 }
 
@@ -397,12 +398,10 @@ FRotator AShutarCharacter::GetIteminterpTargeTRotation() const {
 	return FollowCamera->GetForwardVector().Rotation();
 }
 
-
-
 void AShutarCharacter::EquipItem(AItem* ItemToEquip) {
 	auto Weapon = Cast<AWeapon>(ItemToEquip);
 	if (Weapon) {
-		SwapWeapon(Weapon);
+		EquipWeapon(Weapon);
 	}
 	//else if (Item) //consume;
 }

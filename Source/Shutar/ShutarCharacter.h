@@ -123,8 +123,6 @@ protected:
 	void UnEquipWeapon();
 	void SwapWeapon(AWeapon* WeaponToSwap);
 
-	void InterpWeapon(AWeapon* WeaponToInterp);
-
 	//Item
 	UPROPERTY(EditAnywhere, Category = "ShutarCharacter | Item", meta = (AllowPrivateAccess))
 	float ItemInterpDistance;
